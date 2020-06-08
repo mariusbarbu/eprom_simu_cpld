@@ -6,3 +6,13 @@ de facut;
 - web server to upload new files to flash and then to sram
 - power save?
 - new layout (spi de la esp32; gpio15 la plus; led?; solder peste via pcb settigs - via- solder mask tented)
+
+v100 08.06.2020
+file server si webserver OK
+
+v101 08.06.2020
+implemented file select and write to memory
+bug: in sonerie nu merge decat de la adresa 0. Dar este asa si cu flash extern. de verificat sonerie . probabil cpld. 
+in plus fisierul de sonerie cu 4 voci ales a fost chirstims 4 melodies. scuratt la christ4v.bin. 
+Am modificat in el de mana primii 4bytes la 0x30. alsfel nu mergea. De verificat excel 
+
