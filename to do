@@ -1,0 +1,8 @@
+20.06.2019
+am incercat hw si acum merge .
+de facut;
+- file server for flash
+- load files from flash to sram at start up
+- web server to upload new files to flash and then to sram
+- power save?
+- new layout (spi de la esp32; gpio15 la plus; led?; solder peste via pcb settigs - via- solder mask tented)
