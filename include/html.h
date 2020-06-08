@@ -45,7 +45,7 @@
 
 
   #ifdef ESP8266
-    extern ESP8266WebServer server;
+    extern ESP8266WebServer Webserver;
   #else
     extern WebServer Webserver;
   #endif

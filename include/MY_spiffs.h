@@ -2,8 +2,8 @@
 #define MY_SPIFFS_H
 
 #include <Arduino.h>
-#include <CSS.h>
-#include <html.h>
+#include "CSS.h"
+#include "html.h"
 #ifdef ESP8266
   #include "ESP8266WiFi.h"       // Built-in
   #include "ESP8266WebServer.h"  // Built-in

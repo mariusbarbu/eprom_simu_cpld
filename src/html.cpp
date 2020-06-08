@@ -1,7 +1,7 @@
   #include <Arduino.h>
-  #include <CSS.h>
-  #include <html.h>
-  #include <MY_spiffs.h>
+  #include "CSS.h"
+  #include "html.h"
+  #include "MY_spiffs.h"
   #ifdef ESP8266
     #include <ESP8266WiFi.h>       // Built-in
     #include <ESP8266WebServer.h>  // Built-in
@@ -37,7 +37,7 @@
   #endif
 
   #ifdef ESP8266
-    ESP8266WebServer server(80);
+    ESP8266WebServer Webserver(80);
   #else
     WebServer Webserver(80);
    #endif
@@ -120,7 +120,7 @@ void compare_notes_files (String file_name){
     }
     else{
         Sn("new <do.txt> file and new notes file");
-        open_notes_file(do_text);
+        //open_notes_file(do_text);
         do_text_old =   do_text;
     }
   }
@@ -159,7 +159,7 @@ void handleFileUpload(){ // upload a new file to the Filing system
       webpage += F("<h2>File Size: "); webpage += file_size(uploadfile.totalSize) + "</h2><br>"; 
       append_page_footer();
       Webserver.send(200,"text/html",webpage);
-      compare_notes_files(uploadfile.filename);
+      //compare_notes_files(uploadfile.filename);
     } 
     else
     {

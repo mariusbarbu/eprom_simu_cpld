@@ -16,8 +16,8 @@
 
 
 
-    #define VERSION 24
-    #define DATA "17.05.2020"
+    #define VERSION 100
+    #define DATA "08.06.2020"
 
     ///////////////MACROS///////////////////////
     #define S(msg) Serial.print(msg)
@@ -43,8 +43,8 @@
     void open_notes_file(String Notes_file_name);
 
       // interrrupt for the 2 sec tick to check in flash if new notes file has been uploaded 
-    extern  hw_timer_t * timer;
-    extern portMUX_TYPE timerMux;
+    //extern  hw_timer_t * timer;
+    //extern portMUX_TYPE timerMux;
 
 
     #endif
