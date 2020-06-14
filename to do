@@ -16,3 +16,5 @@ bug: in sonerie nu merge decat de la adresa 0. Dar este asa si cu flash extern. 
 in plus fisierul de sonerie cu 4 voci ales a fost chirstims 4 melodies. scuratt la christ4v.bin. 
 Am modificat in el de mana primii 4bytes la 0x30. alsfel nu mergea. De verificat excel 
 
+v104  14.06.2020
+file from "initial.txt" will be load after reset. 
