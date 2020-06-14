@@ -41,9 +41,21 @@
   #else
     WebServer Webserver(80);
    #endif
+   WiFiClient myclient;
 
   File UploadFile; 
   String file_size(int bytes);
+
+
+  String siteheading    = "EPROM SIMULATOR";               // Site's Main Title
+  String subheading     = "Sensor Readings";               // Sub-heading for all pages
+  String sitetitle      = "ESP32 Webserver";               // Appears on the tabe of a Web Browser
+  String yourfootnote   = "Al.T.Oida"; // A foot note e.g. "My Web Site"
+  String siteversion    = VERSION;  // Version of your Website
+  String siteVersionDate = DATA;
+  String MyCopyright    = "Oida";
+  bool FileType = true;     // true = bin, false = hex
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // All supporting functions from here...
@@ -57,6 +69,8 @@ void HomePage(){
   webpage += F("<a href='/stream'><button>Stream</button></a>");
   webpage += F("<a href='/delete'><button>Delete</button></a>");
   webpage += F("<a href='/dir'><button>Directory</button></a>");
+  webpage += F("<a href='/userinput'><button>Select File</button></a>");
+
   append_page_footer();
   SendHTML_Content();
   SendHTML_Stop(); // Stop is needed because no content length was sent
@@ -248,4 +262,81 @@ String file_size(int bytes){
   else if(bytes < (1024*1024*1024)) fsize = String(bytes/1024.0/1024.0,3)+" MB";
   else                              fsize = String(bytes/1024.0/1024.0/1024.0,3)+" GB";
   return fsize;
+}
+
+void userinput() {
+  FileType = false;
+  //buildUserInputPage();
+  myclient = Webserver.client();
+  if (Webserver.args() > 0 ) { // Arguments were received
+    for ( uint8_t i = 0; i < Webserver.args(); i++ ) {
+      String Argument_Name   = Webserver.argName(i);
+      String client_response = Webserver.arg(i);
+      if (Argument_Name == "File Name") {
+        FileName = client_response;
+        S("File selected: "); Sn(FileName);
+        load_file_to_memory(FileName);
+      }
+      if(Argument_Name == "FileType") {
+        FileType = client_response;
+        Serial.println("Checkbox choice was : "+FileType);
+      }
+    }
+  }
+  /*
+  UR_response.trim(); // Remove any leading spaces
+  if (isValidNumber(UR_response)) UR = UR_response.toFloat();
+  Voltage_Value = UR;
+  Serial.println("   UR : "+String(UR,1));
+  */
+  //Serial.println("Checkbox choice was : "+Precharge);
+   buildUserInputPage();
+  myclient.println(webpage);
+ //showInput();
+}
+
+void buildUserInputPage(){
+  //Precharge = "";
+  webpage = ""; // don't delete this command, it ensures the server works reliably!
+  append_page_header();
+  #ifdef ACCESSPOINT
+  String IPaddress = local_ip.toString();
+  #else
+  String IPaddress = WiFi.localIP().toString();
+  #endif
+  
+  webpage += "<h3>Please input the Eprom file from device memory to be simulate</h3>";
+  webpage += "<form action=\"http://"+IPaddress+"/userinput\" method=\"POST\">";
+  webpage += "<table style='font-family:arial,sans-serif;font-size:16px;border-collapse:collapse;text-align:center;width:90%;margin-left:auto;margin-right:auto;'>";
+  webpage += "<tr>";    // tablw row
+  webpage += "<th style='border:0px solid black;text-align:left;padding:2px;'>File Name</th>";  // table column
+  webpage += "</tr>";   // end table row
+  
+  webpage += "<tr>";
+  webpage += "<td style='border:0px solid black;text-align:left;padding:2px;'><input type='text' name='File Name' value= " + FileName+"></td>";
+  //webpage += "<td style='border:0px solid black;text-align:left;padding:2px;'><input type='text' name='Releu' value= " + RelaisType +"></td>";
+  webpage += "</tr>";
+  
+  webpage += "<tr>";
+  webpage += "</table><br><br>";
+  webpage += "<table style='font-family:arial,sans-serif;font-size:16px;border-collapse:collapse;text-align:center;width:90%;margin-left:auto;margin-right:auto;'>";
+  webpage += "<tr>";    // tablw row
+  webpage += "</table><br><br>";
+
+  webpage += "<input type='checkbox' name='File Type: BIN(Y) or HEX(N)' value='Y'>FileType"; 
+  // And so-on  
+  webpage += "<br><br><input type='submit' value='Enter'><br><br>";
+  webpage += "</form></body>";
+  /*
+  webpage += "<p>This page was displayed on : "+GetTime(timeinfo)+" Hr</p>";
+  Sn(GetTime(timeinfo));
+  String Uptime = (String(millis()/1000/60/60))+":";
+  Uptime += (((millis()/1000/60%60)<10)?"0"+String(millis()/1000/60%60):String(millis()/1000/60%60))+":";
+  Uptime += ((millis()/1000%60)<10)?"0"+String(millis()/1000%60):String(millis()/1000%60);
+  webpage += "<p>Uptime: " + Uptime + "</p>";
+  */
+  append_page_footer();
+  Webserver.send(200, "text/html", webpage); // Send a response to the client to enter their inputs, if needed, Enter=defaults
+  //webpage = "";
+
 }
